@@ -1,3 +1,10 @@
+:root{
+  --Darker-Blue: #242582;
+  --Lighter-Blue: #2F2FA2;
+  --Pinkish: #f64c72;
+  --Monotone-Purple: #554d67;
+  --Unsaturated-Purple: #99738e;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +12,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--Monotone-Purple);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 code {
