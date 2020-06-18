@@ -31,12 +31,12 @@ function Form() {
   const [post, setPost] = useState([]);
 
   // state for whether our button should be disabled or not.
-  const [buttonDisabled, setButtonDisabled] = useState(true);
+  //   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   useEffect(() => {
     formSchema.isValid(formState).then((valid) => {
       console.log("is it valid", valid);
-      setButtonDisabled(!valid);
+      //   setButtonDisabled(!valid);
     });
   }, [formState]);
 
@@ -95,7 +95,7 @@ function Form() {
   };
 
   return (
-    <form>
+    <form onSubmit={formSubmit}>
       <label>
         Name
         <input
@@ -147,7 +147,7 @@ function Form() {
       {/* displaying our post request data */}
 
       {/* <pre>{JSON.stringify(post, null, 2)}</pre> */}
-      <button disabled={buttonDisabled}>Submit</button>
+      <button>Submit</button>
     </form>
   );
 }
