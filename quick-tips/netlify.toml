@@ -1,0 +1,4 @@
+[build]
+base = 'quick-tips/'
+publish = 'quick-tips/build'
+command = 'yarn build'
