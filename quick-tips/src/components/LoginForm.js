@@ -4,12 +4,17 @@ import * as yup from "yup";
 import styled from "styled-components";
 
 const Button = styled.button`
-  background: blue;
+  background: #2f2fa2;
   padding: 6px 10px;
   margin: 5px;
   border: none;
-  border-radius: 3px;
-  color: white;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 19px;
+  display: inline-block;
+  box-shadow: 10px 10px 8px #888888;
+  border: 1px solid;
+  background: linear-gradient(to bottom, #2f2fa2 5%, #242582 100%);
 `;
 
 // yup help with validation
@@ -18,7 +23,7 @@ const formSchema = yup.object().shape({
   password: yup.string().required(),
 });
 
-function Form() {
+function LoginForm() {
   //   declare states and initialize to an object
   const [formState, setFormState] = useState({
     username: "",
@@ -125,4 +130,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default LoginForm;
