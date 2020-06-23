@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import * as yup from "yup";
+import styled from "styled-components";
+
+const Button = styled.button`
+  background: blue;
+  padding: 6px 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 3px;
+  color: white;
+`;
 
 // yup help with validation
 const formSchema = yup.object().shape({
-  name: yup.string().required("Name is a required field."),
-  email: yup.string().email().required("Must be a valid email address."),
+  username: yup.string().required("Name is a required field."),
   password: yup.string().required(),
-  terms: yup.boolean().oneOf([true]),
 });
 
 function Form() {
   //   declare states and initialize to an object
   const [formState, setFormState] = useState({
-    name: "",
-    email: "",
+    username: "",
     password: "",
-    terms: false,
   });
 
   //  we can also use state to hold errors
   const [errors, setErrors] = useState({
-    name: "",
-    email: "",
+    username: "",
     password: "",
-    terms: "",
   });
-
-  // new state to set our post request too. So we can console.log and see it.
-  const [post, setPost] = useState([]);
-
-  // state for whether our button should be disabled or not.
-  //   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   useEffect(() => {
     formSchema.isValid(formState).then((valid) => {
@@ -65,16 +63,16 @@ function Form() {
   const inputChanges = (e) => {
     // console.log("show input", e.target.value);
     e.persist();
-    let value =
-      e.target.type === "checkbox" ? e.target.checkcked : e.target.value;
     setFormState({
       ...formState,
-      [e.target.name]: value,
+      [e.target.name]: e.target.value,
     }); /* ... the ellipses are called spread operator, they copy over data */
 
     validateChange(e);
   };
 
+  // This state is needed for the Axios request.  New state to set our post request too. So we can console.log and see it.
+  const [post, setPost] = useState([]);
   //   this works the submit button:
   const formSubmit = (e) => {
     e.preventDefault();
@@ -85,10 +83,8 @@ function Form() {
 
         // reset form if successful
         setFormState({
-          name: "",
-          email: "",
+          username: "",
           password: "",
-          terms: "",
         });
       })
       .catch((err) => console.log(err.response));
@@ -97,29 +93,19 @@ function Form() {
   return (
     <form onSubmit={formSubmit}>
       <label>
-        Name
+        Username
         <input
           type="text"
-          name="name" /* name is computed key:value in [event.target.name]: event.target.value  */
-          id="name"
-          value={formState.name}
+          name="username" /* name is computed key:value in [event.target.name]: event.target.value  */
+          id="uname"
+          value={formState.username}
           onChange={inputChanges}
         />
-        {errors.name.length > 0 ? <p className="error">{errors.name}</p> : null}
-      </label>
-      <label>
-        Email
-        <input
-          type="text"
-          name="email"
-          id="email"
-          value={formState.email}
-          onChange={inputChanges}
-        />
-        {errors.email.length > 0 ? (
-          <p className="error">{errors.email}</p>
+        {errors.username.length > 0 ? (
+          <p className="error">{errors.username}</p>
         ) : null}
       </label>
+
       <label>
         Password
         <input
@@ -133,21 +119,8 @@ function Form() {
           <p className="error">{errors.password}</p>
         ) : null}
       </label>
-      <label>
-        <input
-          type="checkbox"
-          name="terms"
-          id="terms"
-          checked={formState.terms}
-          onChange={inputChanges}
-        />
-        Terms and Conditions
-      </label>
 
-      {/* displaying our post request data */}
-
-      {/* <pre>{JSON.stringify(post, null, 2)}</pre> */}
-      <button>Submit</button>
+      <Button>Submit</Button>
     </form>
   );
 }
