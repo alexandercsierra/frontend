@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { addReview } from '../actions1';
+import '../review.css';
 function Reviews (props) {
 
     const [newReview, setNewReview] = useState({ 
@@ -30,16 +31,18 @@ function Reviews (props) {
 return (
     <div>
         <div>
-        <h3>Create Review</h3>
+        <h2>Create Review</h2>
         </div>
         <form>
-            <div>
+           
+            <div className="input-container">
             <Divbox
             type='text'
             placeholder='Was this hack practical and effective? Why or why not?'
+            className="input"
             ></Divbox>
             </div>
-           <button>Submit</button>
+           <button className="deepBlue">Submit</button>
         </form>
     </div>
 )
@@ -49,5 +52,5 @@ return (
 
 export default connect(null, {addReview})(Reviews)
 
-const Divbox = styled.input`height:130px; border: solid gray 1px; width: 40%; border-radius: 1%`;
+const Divbox = styled.input`height:130px; border: solid gray 1px; width: 40%; border-radius: 1%; `; 
 
