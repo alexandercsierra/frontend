@@ -1,25 +1,19 @@
 import React, { useState } from 'react';
-import '../components/Form.css'
+import '../components/SignUpForm.css'
 import * as yup from 'yup';
+import axios from 'axios';
 
 export default function Form(){
     const [formState, setFormState] = useState({
-        first_name: '',
-        last_name: '',
         email: '',
         password: '',
         username: '',
-        terms: false
+        consumer: '',
+        terms: true
     })
     const [post, setPost] = useState([]);
     // Yup validation and errors
     const formSchema = yup.object().shape({
-        first_name: yup
-        .string()
-        .required('This field is required'),
-        last_name: yup
-        .string()
-        .required('This field is required'),
         email: yup
         .string()
         .email('Must be a valid email address')
@@ -31,16 +25,19 @@ export default function Form(){
         username: yup
         .string()
         .required('This field is required'),
+        consumer: yup
+        .string()
+        .oneOf(['creator', 'student'])
+        .required('Please Chooose An Option'),
         terms: yup
         .boolean()
         .oneOf([true])
     })
     const [errors, setErrors]= useState({
-        first_name: '',
-        last_name: '',
         email: '',
         password: '',
         username: '',
+        consumer: '',
         terms: false
     })
     const validation = e => {
@@ -65,10 +62,9 @@ export default function Form(){
         let checkboxVal = true;
 
         if (e.target.name === "terms") {
-            checkboxVal = e.target.checked;
-            console.log('check', e.target.checked)
+        checkboxVal = e.target.checked;
         } else {
-            checkboxVal = formState.terms;
+        checkboxVal = formState.terms;
         }
         setFormState({
             ...formState,
@@ -87,13 +83,17 @@ export default function Form(){
     
     const onSubmit = e => {
         e.preventDefault();
+        axios
+            .post('https://reqres.in/api/users', formState)
+            .then(res => {
+                setPost(res.data);
+            })
         setFormState({
-            first_name: '',
-            last_name: '',
             email: '',
             password: '',
             username: '',
-            terms: false
+            consumer: '',
+            terms: true
         })
     }
     return(
@@ -101,28 +101,6 @@ export default function Form(){
                 <h1 className='title'>Create Account</h1>
                 <p>Sign Up To Get Up To Date How-To Tutorials</p>
                 <form className='form' onSubmit={onSubmit}>
-                    <label className='label' htmlFor='first-name'>
-                        <input
-                        className='text-boxes' 
-                        type='text' 
-                        name='first_name'
-                        id='first-name'
-                        placeholder='First Name'
-                        value={formState.first_name}
-                        onChange={inputChange}/>
-                    </label>
-                    {errors.first_name.length > 0 ? (<p className="error">{errors.first_name}</p>) : null}
-                    <label className='label' htmlFor='last-name'>
-                        <input 
-                        className='text-boxes'
-                        type='text' 
-                        name='last_name'
-                        id='last-name'
-                        placeholder='Last Name'
-                        value={formState.last_name}
-                        onChange={inputChange}/>
-                    </label>
-                    {errors.last_name.length > 0 ? (<p className="error">{errors.last_name}</p>) : null}
                     <label className='label' htmlFor='email'>
                         <input 
                         className='text-boxes'
@@ -156,6 +134,15 @@ export default function Form(){
                         onChange={inputChange}/>
                     </label>
                     {errors.username.length > 0 ? (<p className="error">{errors.username}</p>) : null}
+                        <select 
+                        className='text-boxes'
+                        name='consumer'
+                        onChange={inputChange}
+                        >   
+                        <option selected='true' disabled='disabled'>Select One</option>
+                        <option value='creator'>Creator</option>
+                        <option value='student'>Student</option>
+                        </select>
                     <label htmlFor='terms-checkbox' className='terms-label'>By clicking the checkbox you agree to our <a href='#' className='tos'>Terms and Conditions</a>
                         <input 
                         type='checkbox' 
