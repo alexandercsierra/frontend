@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../components/SignUpForm.css'
 import * as yup from 'yup';
 import axios from 'axios';
@@ -9,8 +9,9 @@ export default function Form(){
         password: '',
         username: '',
         consumer: '',
-        terms: true
+        terms: false
     })
+    const [buttonDisabled, setButtonDisabled] = useState(true)
     const [post, setPost] = useState([]);
     // Yup validation and errors
     const formSchema = yup.object().shape({
@@ -27,18 +28,22 @@ export default function Form(){
         .required('This field is required'),
         consumer: yup
         .string()
-        .oneOf(['creator', 'student'])
-        .required('Please Chooose An Option'),
+        .oneOf(['creator', 'student']),
         terms: yup
         .boolean()
         .oneOf([true])
     })
+    useEffect(() => {
+        formSchema.isValid(formState).then(isFormValid => {
+            setButtonDisabled(!isFormValid)
+        });
+    }, [formState]);
     const [errors, setErrors]= useState({
         email: '',
         password: '',
         username: '',
         consumer: '',
-        terms: false
+        terms: ''
     })
     const validation = e => {
         yup
@@ -93,7 +98,7 @@ export default function Form(){
             password: '',
             username: '',
             consumer: '',
-            terms: true
+            terms: false
         })
     }
     return(
@@ -147,10 +152,12 @@ export default function Form(){
                         <input 
                         type='checkbox' 
                         id='terms-checkbox'
-                        name='terms' />
+                        name='terms'
+                        checked={formState.terms}
+                        onChange={inputChange} />
                     </label>
                     {errors.terms.length > 0 ? (<p className="error">{errors.terms}</p>) : null}
-                    <button className='btn'>Sign Up</button>
+                    <button className='btn' disabled={buttonDisabled}>Sign Up</button>
                 </form>
             </div>
     )
